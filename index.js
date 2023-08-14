@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const multer = require("multer");
+
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
@@ -15,22 +16,22 @@ dotenv.config();
 const PORT = process.env.PORT;
 const CONNECTION_URL = process.env.MONGO_URL;
 
-app.use("/images", express.static(path.join(__dirname, "public/images")));
-app.get("/", (req, res) => res.send("Hello World"));
 //middleware
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
 app.use(cors());
+app.use(express.urlencoded({ extended: false }));
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+
+app.use("/images", express.static(path.join(__dirname, "public/images")));
+app.get("/", (req, res) => res.send("Hello World"));
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "public/images");
   },
   filename: (req, file, cb) => {
-    cb(null, req.body.name);
+    cb(null, file.originalname);
   },
 });
 
