@@ -22,6 +22,9 @@ app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
 app.use(cors());
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "public/images");
